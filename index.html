@@ -181,13 +181,13 @@
         function updateHBE(data) {
             console.log("Menerima data:", data); 
             const parts = data.split('|');
-            if (parts.length < 5) return;
+            if (parts.length < 4) return;
 
             const hp = Math.max(0, Math.min(100, parseFloat(parts[0]) || 0));
             const armor = Math.max(0, Math.min(100, parseFloat(parts[1]) || 0));
             const lapar = Math.max(0, Math.min(100, parseFloat(parts[2]) || 0));
             const haus = Math.max(0, Math.min(100, parseFloat(parts[3]) || 0));
-            const kencing = Math.max(0, Math.min(100, parseFloat(parts[4]) || 0));
+            const kencing = 100;
 
             updateLevel('hp', hp);
             updateLevel('armor', armor);
