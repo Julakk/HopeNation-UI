@@ -1,215 +1,291 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>ATY HUD - Water Level Dark</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HopeCity HUD</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
 
-        body {
-            background-color: transparent;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: flex-start; 
-            align-items: flex-end;
-            height: 100vh;
-            padding-left: 24px;
-            padding-bottom: 24px;
-        }
+html,
+body {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
 
-        /* =========================================
-           CONTAINER UTAMA (MODERN DARK GLASS)
-           ========================================= */
-        .hbe-container {
-            display: flex;
-            flex-direction: row; 
-            gap: 10px;
-            
-            /* HITAM MODERN: Transparan gelap dengan blur */
-            background: rgba(10, 10, 12, 0.75);
-            backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px);
-            
-            padding: 10px 14px;
-            border-radius: 13px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.8), 
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
+.hbe-container {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
 
-        /* =========================================
-           KOTAK IKON (WADAH AIR)
-           ========================================= */
-        .stat-box {
-            position: relative;
-            width: 32px; /* Sedikit dibesarkan agar proporsional */
-            height: 32px;
-            border-radius: 8px;
-            
-            /* Background dalam kotak lebih gelap */
-            background-color: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: translateZ(0); 
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-        }
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-        /* =========================================
-           EFEK AIR BERGELOMBANG
-           ========================================= */
-        .water {
-            position: absolute;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            bottom: -210%; 
-            border-radius: 40%; 
-            transition: bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: waveAnimation 4s linear infinite; 
-            z-index: 1;
-        }
+    padding: 8px 10px;
 
-        .water-secondary {
-            position: absolute;
-            left: -55%;
-            width: 210%;
-            height: 210%;
-            bottom: -210%;
-            border-radius: 38%;
-            transition: bottom 1s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: waveAnimation 6s linear infinite;
-            opacity: 0.6;
-            z-index: 2;
-        }
+    background: rgba(8, 10, 13, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 12px;
 
-        @keyframes waveAnimation {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
-        /* Ikon di Atas Air */
-        .icon {
-            position: relative;
-            z-index: 10;
-            font-size: 14px; /* Ikon sedikit diperbesar */
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9); /* Shadow lebih tegas */
-            pointer-events: none;
-        }
+    z-index: 100;
+}
 
-        /* =========================================
-           WARNA AIR (Vibrant Glow)
-           ========================================= */
-        .hp .water, .hp .water-secondary { background: #ff3b30; box-shadow: 0 0 10px #ff3b30; }
-        .armor .water, .armor .water-secondary { background: #8e8e93; box-shadow: 0 0 10px #8e8e93; }
-        .hunger .water, .hunger .water-secondary { background: #ff9500; box-shadow: 0 0 10px #ff9500; }
-        .thirst .water, .thirst .water-secondary { background: #007aff; box-shadow: 0 0 10px #007aff; }
-        .bladder .water, .bladder .water-secondary { background: #34c759; box-shadow: 0 0 10px #34c759; }
+.stat-box {
+    position: relative;
 
-        .value-text {
-            display: none; 
-        }
-    </style>
+    width: 38px;
+    height: 38px;
+
+    overflow: hidden;
+
+    border-radius: 9px;
+    background: rgba(0, 0, 0, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.water,
+.water2 {
+    position: absolute;
+
+    left: -50%;
+    width: 200%;
+    height: 200%;
+
+    bottom: -210%;
+
+    border-radius: 40%;
+
+    transition: bottom 0.45s cubic-bezier(.4,0,.2,1);
+
+    animation: wave 4s linear infinite;
+}
+
+.water {
+    z-index: 1;
+}
+
+.water2 {
+    left: -55%;
+    width: 210%;
+    height: 210%;
+
+    opacity: 0.45;
+    z-index: 2;
+
+    animation-duration: 6s;
+}
+
+@keyframes wave {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.icon {
+    position: relative;
+    z-index: 10;
+
+    font-size: 17px;
+    color: #fff;
+
+    text-shadow: 0 2px 5px rgba(0,0,0,.95);
+}
+
+.hp .water,
+.hp .water2 {
+    background: #ff3b30;
+    box-shadow: 0 0 12px rgba(255,59,48,.55);
+}
+
+.armor .water,
+.armor .water2 {
+    background: #b8bdc7;
+    box-shadow: 0 0 12px rgba(184,189,199,.40);
+}
+
+.hunger .water,
+.hunger .water2 {
+    background: #ff9500;
+    box-shadow: 0 0 12px rgba(255,149,0,.50);
+}
+
+.thirst .water,
+.thirst .water2 {
+    background: #0a84ff;
+    box-shadow: 0 0 12px rgba(10,132,255,.55);
+}
+
+.hud-frame {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    background: transparent;
+
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.logo-frame {
+    z-index: 110;
+}
+
+.stats-frame {
+    z-index: 105;
+}
+
+.speed-frame {
+    z-index: 95;
+}
+
+.hud-hidden {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+</style>
 </head>
-<body>
 
-    <div class="hbe-container">
-        <!-- Health -->
-        <div class="stat-box hp">
-            <div class="water" id="hp-w1"></div>
-            <div class="water-secondary" id="hp-w2"></div>
-            <i class="fa-solid fa-heart icon"></i>
-        </div>
+<body class="hud-hidden">
 
-        <!-- Armor -->
-        <div class="stat-box armor" id="armor-container">
-            <div class="water" id="armor-w1"></div>
-            <div class="water-secondary" id="armor-w2"></div>
-            <i class="fa-solid fa-shield-halved icon"></i>
-        </div>
+<!-- HBE BARU -->
+<div class="hbe-container">
 
-        <!-- Hunger -->
-        <div class="stat-box hunger">
-            <div class="water" id="hunger-w1"></div>
-            <div class="water-secondary" id="hunger-w2"></div>
-            <i class="fa-solid fa-utensils icon"></i>
-        </div>
-
-        <!-- Thirst -->
-        <div class="stat-box thirst">
-            <div class="water" id="thirst-w1"></div>
-            <div class="water-secondary" id="thirst-w2"></div>
-            <i class="fa-solid fa-droplet icon"></i>
-        </div>
-
-        <!-- Bladder -->
-        <div class="stat-box bladder">
-            <div class="water" id="bladder-w1"></div>
-            <div class="water-secondary" id="bladder-w2"></div>
-            <i class="fa-solid fa-toilet icon"></i>
-        </div>
+    <div class="stat-box hp">
+        <div class="water" id="hp-w1"></div>
+        <div class="water2" id="hp-w2"></div>
+        <div class="icon">♥</div>
     </div>
 
-    <script>
-        function updateLevel(idPrefix, percent) {
-            const w1 = document.getElementById(idPrefix + '-w1');
-            const w2 = document.getElementById(idPrefix + '-w2');
-            
-            if (!w1 || !w2) return;
+    <div class="stat-box armor" id="armor-container">
+        <div class="water" id="armor-w1"></div>
+        <div class="water2" id="armor-w2"></div>
+        <div class="icon">◆</div>
+    </div>
 
-            const finalBottom = -210 + (percent * 1.2);
+    <div class="stat-box hunger">
+        <div class="water" id="hunger-w1"></div>
+        <div class="water2" id="hunger-w2"></div>
+        <div class="icon">🍴</div>
+    </div>
 
-            w1.style.bottom = finalBottom + "%";
-            w2.style.bottom = (finalBottom + 2) + "%"; 
+    <div class="stat-box thirst">
+        <div class="water" id="thirst-w1"></div>
+        <div class="water2" id="thirst-w2"></div>
+        <div class="icon">●</div>
+    </div>
+
+</div>
+
+<!-- UI LAIN -->
+<iframe class="hud-frame logo-frame" src="logoserver.html"></iframe>
+<iframe class="hud-frame speed-frame" src="speedo.html"></iframe>
+<iframe class="hud-frame stats-frame" src="statsinfo.html"></iframe>
+
+<script>
+function updateLevel(id, value) {
+    const w1 = document.getElementById(id + "-w1");
+    const w2 = document.getElementById(id + "-w2");
+
+    if (!w1 || !w2) return;
+
+    value = Math.max(0, Math.min(100, Number(value) || 0));
+
+    const bottom = -210 + (value * 1.2);
+
+    w1.style.bottom = bottom + "%";
+    w2.style.bottom = (bottom + 2) + "%";
+}
+
+function updateHBE(hp, armor, hunger, thirst) {
+    updateLevel("hp", hp);
+    updateLevel("armor", armor);
+    updateLevel("hunger", hunger);
+    updateLevel("thirst", thirst);
+
+    const armorBox = document.getElementById("armor-container");
+
+    if (armorBox) {
+        armorBox.style.opacity = armor <= 1 ? "0.4" : "1";
+    }
+}
+
+function getHudFrame(selector) {
+    const frame = document.querySelector(selector);
+
+    if (!frame || !frame.contentWindow) {
+        return null;
+    }
+
+    return frame.contentWindow;
+}
+
+if (typeof cef !== "undefined" && cef.on) {
+
+    cef.on("showHUD", function() {
+        document.body.classList.remove("hud-hidden");
+    });
+
+    cef.on("hideHUD", function() {
+        document.body.classList.add("hud-hidden");
+    });
+
+    cef.on("updateHBE", function(hp, armor, hunger, thirst) {
+        updateHBE(hp, armor, hunger, thirst);
+    });
+
+    cef.on("updateSpeedo", function(data) {
+        const frame = getHudFrame(".speed-frame");
+
+        if (frame && typeof frame.updateSpeedometer === "function") {
+            frame.updateSpeedometer(data);
         }
+    });
 
-        function updateHBE(data) {
-            console.log("Menerima data:", data); 
-            const parts = data.split('|');
-            if (parts.length < 4) return;
+    cef.on("hideSpeedo", function() {
+        const frame = getHudFrame(".speed-frame");
 
-            const hp = Math.max(0, Math.min(100, parseFloat(parts[0]) || 0));
-            const armor = Math.max(0, Math.min(100, parseFloat(parts[1]) || 0));
-            const lapar = Math.max(0, Math.min(100, parseFloat(parts[2]) || 0));
-            const haus = Math.max(0, Math.min(100, parseFloat(parts[3]) || 0));
-            const kencing = 100;
-
-            updateLevel('hp', hp);
-            updateLevel('armor', armor);
-            updateLevel('hunger', lapar);
-            updateLevel('thirst', haus);
-            updateLevel('bladder', kencing);
-
-            const armorContainer = document.getElementById('armor-container');
-            if (armorContainer) {
-                if (armor <= 1) {
-                    armorContainer.style.opacity = '0.4';
-                } else {
-                    armorContainer.style.opacity = '1';
-                }
-            }
+        if (frame && typeof frame.hideSpeedometer === "function") {
+            frame.hideSpeedometer();
         }
+    });
 
-        if (typeof cef !== "undefined" && cef.on) {
-            cef.on("updateHBE", function(data) {
-                updateHBE(data);
-            });
+    cef.on("updatePlayerInfo", function(data) {
+        const frame = getHudFrame(".stats-frame");
+
+        if (frame && typeof frame.updatePlayerInfo === "function") {
+            frame.updatePlayerInfo(data);
         }
-    </script>
+    });
+}
+
+updateHBE(100, 100, 100, 100);
+</script>
+
 </body>
 </html>
